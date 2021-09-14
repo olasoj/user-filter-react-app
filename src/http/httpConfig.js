@@ -1,6 +1,6 @@
 import axios from "axios"
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URL
+axios.defaults.baseURL = "http://localhost:8080"//process.env.REACT_APP_API_URL
 axios.interceptors.response.use(null, (error) => {
     const expectedErr =
         error.response &&
@@ -12,6 +12,10 @@ axios.interceptors.response.use(null, (error) => {
 
 function setJwt(jwt) {
     axios.defaults.headers.common["x-auth-token"] = jwt
+}
+
+export const header = {
+    "Content-Type": "application/json"
 }
 
 const http = {
