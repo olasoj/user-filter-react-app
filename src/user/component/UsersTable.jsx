@@ -3,12 +3,9 @@ import React from 'react';
 import Table from '../../common/Table';
 
 
-const MoviesTable = ({
-  paginatedMovies,
-  onLike,
+const UsersTable = ({
+  users,
   onDelete,
-  onSort,
-  sortColumn
 }) => {
   //for table headers and table body
 
@@ -29,12 +26,10 @@ const MoviesTable = ({
 
   return (
     <Table
-      data={paginatedMovies}
+      data={users}
       columns={columns}
-      sortColumn={sortColumn}
-      onSort={onSort}
     />
   );
 };
 
-export default MoviesTable;
+export default UsersTable;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Joi from 'joi-browser';
+// import Joi from 'joi-browser'; 
 import Input from '../common/Input';
 import Select from './Select';
 
@@ -20,7 +20,7 @@ class Form extends Component {
 
     //Getting the error properties of the validation
     const options = { abortEarly: false };
-    const { error } = Joi.validate(data, this.schema, options);
+    const { error } = false;//Joi.validate(data, this.schema, options);
     //if no errors exists, exit the function
     if (!error) return '';
 
@@ -34,7 +34,7 @@ class Form extends Component {
     return errors;
   };
 
-  //hanle validation of each field
+  //handle validation of each field
   //name and value are coming from e.target
   validateProperty = ({ name, value }) => {
     //validating field value
@@ -43,7 +43,7 @@ class Form extends Component {
     const fieldSchema = { [name]: this.schema[name] };
 
     //get the error property
-    const { error } = Joi.validate(obj, fieldSchema);
+    const { error } = false//Joi.validate(obj, fieldSchema);
 
     return error ? error.details[0].message : null;
   };
@@ -63,9 +63,10 @@ class Form extends Component {
 
   handleSelect = ({ target }) => {
     const { data } = this.state;
-    const newData = { ...data };
+    console.log(target.value)
+    // const newData = { ...data };
     if (target.value)
-      return this.setState({ data: { ...newData, genreId: target.value } });
+      return this.setState({ data: { ...data, [target.id]: target.value } });
   };
 
   handleSubmit = e => {
@@ -94,15 +95,15 @@ class Form extends Component {
     );
   };
 
-  renderSelect = name => {
-    const { genres } = this.state;
+  renderSelect = (dataListName, name, label) => {
+    const { data: { [dataListName]: data } } = this.state;
 
     return (
       <Select
-        name='genre'
-        options={genres}
+        name={[name]}
+        options={data}
         onChange={this.handleSelect}
-        label='Genre'
+        label={[label]}
       />
     );
   };

@@ -3,10 +3,10 @@ import React from 'react';
 import TableHeader from './TableHeader';
 import TableBody from './TableBody';
 
-const Table = ({ columns, onSort, sortColumn, data }) => {
+const Table = ({ columns, data }) => {
   return (
     <table className='table'>
-      <TableHeader onSort={onSort} sortColumn={sortColumn} columns={columns} />
+      <TableHeader columns={columns} />
       <TableBody data={data} columns={columns} />
     </table>
   );
