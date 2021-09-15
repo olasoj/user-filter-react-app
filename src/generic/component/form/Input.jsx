@@ -2,8 +2,8 @@ import React from 'react';
 
 const Input = ({ label, name, error, ...rest }) => {
   return (
-    <div className='form-group'>
-      <label htmlFor={name}>{label}</label>
+    <div className="mb-3">
+      <label className="form-label" htmlFor={name}>{label}</label>
 
       <input
         {...rest}
@@ -11,7 +11,7 @@ const Input = ({ label, name, error, ...rest }) => {
         className='form-control'
         id={name}
         placeholder={name}
-        // ref={username}
+      // ref={username}
       />
       {error && <div className='alert alert-danger'>{error}</div>}
     </div>

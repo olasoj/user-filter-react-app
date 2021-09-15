@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Table from '../../common/Table';
+import Table from '../../generic/component/table/Table';
 
 
 const UsersTable = ({

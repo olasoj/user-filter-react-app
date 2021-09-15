@@ -1,83 +1,73 @@
 import React, { Component } from 'react';
-// import Joi from 'joi-browser'; 
-import Input from '../common/Input';
+import Joi from 'joi-browser';
+import Input from './Input';
 import Select from './Select';
+import * as yup from 'yup';
+
 
 //const username = React.createRef();
 
 class Form extends Component {
   constructor() {
     super();
-    this.state = {
-      data: {},
-      errors: {}
-    };
+    this.state = { data: {}, errors: {} };
   }
 
-  //handle validation of the form
-  validate = () => {
-    const { data } = this.state;
 
-    //Getting the error properties of the validation
-    const options = { abortEarly: false };
-    const { error } = false;//Joi.validate(data, this.schema, options);
-    //if no errors exists, exit the function
-    if (!error) return '';
+  handleSubmit = async (e) => {
+    e.preventDefault();
+    const errors = await this.validateForm();
+    console.log(errors)
+    this.setState({ errors } || { error: {} });
 
-    //create an object to store each errors
-    const errors = {};
+    if (errors) return;
 
-    //Get the items in the error.details
-    // error.details returns a list of objects
-    //return an objects
-    error.details.map(err => (errors[err.path[0]] = err.message));
-    return errors;
+    this.doSubmit();
   };
 
-  //handle validation of each field
-  //name and value are coming from e.target
-  validateProperty = ({ name, value }) => {
-    //validating field value
-    const obj = { [name]: value };
-    //create schema used to validate the field
-    const fieldSchema = { [name]: this.schema[name] };
+  validateForm = async () => {
+    const { data } = this.state;
+    const options = { abortEarly: false };
 
-    //get the error property
-    const { error } = false//Joi.validate(obj, fieldSchema);
 
-    return error ? error.details[0].message : null;
+    const valid = await this.schema.isValid(data);
+
+    console.log(valid)
+
+    const { error } = false;//Joi.validate(data, this.schema, options);
+
+    if (!error) return '';
+
+    // const errors = {};
+    // error.details.map(err => (errors[err.path[0]] = err.message));
+    // return errors;
   };
 
   handleChange = ({ target }) => {
     const { data, error } = this.state;
     const errors = { ...error };
-    const errorMessage = this.validateProperty(target);
+    const errorMessage = null//this.validateProperty(target);
 
     if (errorMessage) errors[target.name] = errorMessage;
     else delete errors[target.name];
-    this.setState({
-      data: { ...data, [target.name]: target.value },
-      errors: { ...errors }
-    });
+    this.setState({ data: { ...data, [target.name]: target.value }, errors: { ...errors } });
   };
+
+  validateProperty = ({ name, value }) => {
+    console.log(name)
+    const obj = { [name]: value };
+    const fieldSchema = { [name]: this.schema[name] };
+
+    const { error } = Joi.validate(obj, fieldSchema);
+    return error ? error.details[0].message : null;
+  };
+
 
   handleSelect = ({ target }) => {
     const { data } = this.state;
-    console.log(target.value)
-    // const newData = { ...data };
-    if (target.value)
-      return this.setState({ data: { ...data, [target.id]: target.value } });
+    if (target.value) return this.setState({ data: { ...data, [target.id]: target.value } });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    const errors = this.validate();
-    this.setState({ errors } || { error: {} });
-    console.log(errors);
-    if (errors) return;
-
-    this.doSubmit();
-  };
 
   renderInput = (label, name, type = 'text') => {
     const { data, errors } = this.state;
@@ -97,21 +87,13 @@ class Form extends Component {
 
   renderSelect = (dataListName, name, label) => {
     const { data: { [dataListName]: data } } = this.state;
-
-    return (
-      <Select
-        name={[name]}
-        options={data}
-        onChange={this.handleSelect}
-        label={[label]}
-      />
-    );
+    return (<Select name={[name]} options={data} onChange={this.handleSelect} label={[label]} />);
   };
 
   renderButton = label => {
     return (
       <button
-        //disabled={this.validate()}
+        // disabled={this.validateForm()}
         type='submit'
         className='btn btn-primary'
       >

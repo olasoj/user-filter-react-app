@@ -7,53 +7,23 @@ import { getAllUsers, getDistinctValues } from '../userService'
 
 //component
 import UserTable from './UsersTable';
-import Form from '../../common/Form';
+import Form from '../../generic/component/form/Form';
 
 //common components
-import Pagination from '../../common/Pagination';
+import Pagination from '../../generic/Pagination';
 
 class Users extends Form {
   constructor() {
     super();
     this.state = {
       data: {
-
-        users: [],
-
-        username: '',
-        password: '',
         name: '',
-
-        totalNumberOfUser: null,
-        totalUserOnPage: 1,
-
-
-        selectedWorkCategory: null,
-        selectedInterest: null,
-
-
-        page: 1,
-        pageSize: 10,
-
-
-        distinctWorkCategory: [],
-
-        distinctInterest: [],
+        page: 1, pageSize: 10,
+        selectedWorkCategory: null, selectedInterest: null,
+        users: [], distinctWorkCategory: [], distinctInterest: [],
+        totalNumberOfUser: null, totalUserOnPage: 1
       },
-      errors: {
-        username: '',
-        password: '',
-        name: ''
-      },
-
-
-      page: 1,
-      pageSize: 10,
-
-      selectedInterest: '',
-      selectedWorkCategory: '',
-
-
+      errors: { name: '' },
 
       selectedGenre: '',
       foundBySearch: '',
@@ -72,7 +42,6 @@ class Users extends Form {
     }
   }
 
-  // //deletes a movie
   // deleteAMovie = async id => {
   //   //clone the movies
   //   console.log(id);
@@ -91,8 +60,6 @@ class Users extends Form {
   //   }
   // };
 
-
-  //change page
   handlePageChange = async (pageNumber) => {
     const { data } = this.state
     data.page = pageNumber;
@@ -107,7 +74,6 @@ class Users extends Form {
     } catch (err) {
       if (err.response && err.response.status === 400) {
         const errors = { ...this.state.errors };
-        errors.username = err.response.data;
         this.setState({ errors });
       }
     }
@@ -115,44 +81,29 @@ class Users extends Form {
 
   async fetchUserDetailsData() {
     const { data } = this.state;
-    const fetchUsersRequest = this.getFetchUsersRequest(data);
-    console.log(fetchUsersRequest)
-    const { data: users } = await getAllUsers(fetchUsersRequest);
+    const { data: users } = await getAllUsers(this.getUserRequestBody(data));
     const { data: distinctValues } = await getDistinctValues();
-    console.log(data.users);
-
-
     this.resolveUsersState(users, distinctValues, data);
   }
 
   resolveUsersState(users, distinctValues, data) {
-
-    this.setState({
-      data: this.newData(data, users, distinctValues),
-    });
+    this.setState({ data: this.getNewData(data, users, distinctValues), });
   }
 
-  newData(data, users, distinctValues) {
+  getNewData(data, users, distinctValues) {
     return {
       ...data, totalNumberOfUser: users._totalNumberOfUser,
+      page: users._pageNumber, pageSize: users._pageSize,
       users: [...users._userResponse],
-      page: users._pageNumber,
-      pageSize: users._pageSize,
       distinctWorkCategory: [...distinctValues.distinctWorkCategories],
       distinctInterest: [...distinctValues.distinctInterests], totalUserOnPage: users._numberOfRecordsOnPage,
     };
   }
 
-  getFetchUsersRequest(data) {
+  getUserRequestBody(data) {
     return {
-      userPageRequest: {
-        pageNumber: data.page,
-        pageSize: data.pageSize
-      },
-      userFilterRequest: {
-        workCategory: data.selectedWorkCategory,
-        interest: data.selectedInterest
-      }
+      userPageRequest: { pageNumber: data.page, pageSize: data.pageSize },
+      userFilterRequest: { workCategory: data.selectedWorkCategory, interest: data.selectedInterest }
     };
   }
 
@@ -161,23 +112,12 @@ class Users extends Form {
 
     return (
       <div className='row'>
-
         <div className='col'>
-
           {this.getDistinctForm()}
           {this.getTableMetaData(totalNumberOfUser)}
 
-          <UserTable
-            users={users}
-            onDelete={this.deleteAMovie}
-          />
-
-          <Pagination
-            totalNumberOfRecord={totalNumberOfUser}
-            pageSize={pageSize}
-            currentPage={page}
-            onPageChange={this.handlePageChange}
-          />
+          <UserTable users={users} onDelete={this.deleteAMovie} />
+          <Pagination totalNumberOfRecord={totalNumberOfUser} pageSize={pageSize} currentPage={page} onPageChange={this.handlePageChange} />
         </div>
       </div>
     );
@@ -189,7 +129,7 @@ class Users extends Form {
         <p>{totalNumberOfUsers} users(s) founded</p>
       </div>
       <div className='col'>
-        <Link className='btn-primary btn m-2' to='/movies/new'>
+        <Link className='btn-primary btn m-2' to='/users/add'>
           Add User
         </Link>
       </div>
