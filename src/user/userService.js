@@ -2,7 +2,7 @@ import http, { header } from '../http/httpConfig';
 
 const apiUrl = '/user';
 
-export async function populateUserTable(newUser) {
+export async function populateUserTable() {
   return await http.post(`{apiUrl}/populate-table`, { ...header });
 }
 
