@@ -7,7 +7,7 @@ import "./App.css"
 
 import Users from './user/component/Users';
 import NavBar from './navigation/component/NavBar';
-// import NotFound from './components/NotFound';
+import NotFound from './notfound/component/NotFound';
 import NewUserForm from './user/component/NewUserForm';
 
 class App extends Component {
@@ -25,7 +25,7 @@ class App extends Component {
               <Route path='/users/add' component={NewUserForm} />
               <Route path='/users' render={(props) => <Users {...props} />} />
               <Redirect exact from='/' to='/users' />
-              {/* <Route path='/not-found' component={NotFound} /> */}
+              <Route path='/not-found' component={NotFound} />
               <Redirect to='/not-found' />
             </Switch>
           </main>

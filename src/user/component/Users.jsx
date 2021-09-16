@@ -24,6 +24,12 @@ class Users extends Form {
     };
   }
 
+  schema = //yup.object().shape({
+    {
+
+    }
+  //});
+
   async componentDidMount() {
     try {
       await this.fetchUserDetailsData();

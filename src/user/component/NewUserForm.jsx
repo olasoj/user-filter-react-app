@@ -16,26 +16,38 @@ class NewUserForm extends Form {
     };
   }
 
-  schema = yup.object().shape({
-    email: yup.string()
-      .email()
-      .required(),
-    fullName: yup
-      .string()
-      .required(),
-    username: yup
-      .string()
-      .required(),
-    workCategory: yup
-      .string()
-      .required(),
-    interest: yup
-      .string()
-      .required(),
-    yearsOfExperience: yup.number()
-      .required().positive()
-      .integer()
-  });
+  schema = //yup.object().shape({
+    {
+      email: yup.string()
+        .email()
+        .required()
+        .label('E-mail'),
+
+
+      fullName: yup
+        .string()
+        .required()
+        .label('fullName'),
+
+      username: yup
+        .string()
+        .required()
+        .label('Username'),
+      workCategory: yup
+        .string()
+        .required()
+        .label('workCategory'),
+      interest: yup
+        .string()
+        .required()
+        .label('interest'),
+
+      yearsOfExperience: yup.number()
+        .required().positive()
+        .integer()
+        .label('yearsOfExperience')
+    }
+  //});
 
   // schema = {
   //   username: Joi.string()
@@ -53,13 +65,13 @@ class NewUserForm extends Form {
 
   doSubmit = async () => {
     try {
-      console.log(this.schema)
+      // console.log(this.schema)
       const { data } = await userService.addUser(this.state.data);
-      console.log(data)
+      // console.log(data)
       // window.location = '/';
     } catch ({ response }) {
       if (response && response.status === 400) {
-        console.log(response)
+        // console.log(response)
         // const errors = { ...this.state.errors };
         // errors.username = err.response.data;
         // this.setState({ errors });

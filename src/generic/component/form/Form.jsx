@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import Joi from 'joi-browser';
 import Input from './Input';
 import Select from './Select';
 import * as yup from 'yup';
-
-
-//const username = React.createRef();
+import { each, groupBy, keys } from 'lodash-es';
 
 class Form extends Component {
   constructor() {
@@ -17,36 +14,42 @@ class Form extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     const errors = await this.validateForm();
-    console.log(errors)
     this.setState({ errors } || { error: {} });
 
     if (errors) return;
-
     this.doSubmit();
   };
 
   validateForm = async () => {
-    const { data } = this.state;
-    const options = { abortEarly: false };
-
-
-    const valid = await this.schema.isValid(data);
-
-    console.log(valid)
-
-    const { error } = false;//Joi.validate(data, this.schema, options);
-
-    if (!error) return '';
-
-    // const errors = {};
-    // error.details.map(err => (errors[err.path[0]] = err.message));
-    // return errors;
+    try {
+      const { data } = this.state;
+      const options = { abortEarly: false };
+      const schemaTransform = yup.object().shape(this.schema);
+      await schemaTransform.validate(schemaTransform.cast(data), options);
+      return '';
+    } catch (err) {
+      return this.getFormErrors(err);
+    }
   };
+
+  getFormErrors(err) {
+    const errors = {};
+    const fieldErrors = groupBy(err.inner, 'path');
+    const fields = keys(fieldErrors);
+
+    each(fields, (field) => {
+      each(fieldErrors[field], (fieldError) => {
+        Object.assign((errors[field] = fieldError.errors[0]));
+      });
+    });
+
+    return errors;
+  }
 
   handleChange = ({ target }) => {
     const { data, error } = this.state;
     const errors = { ...error };
-    const errorMessage = null//this.validateProperty(target);
+    const errorMessage = this.validateProperty(target);
 
     if (errorMessage) errors[target.name] = errorMessage;
     else delete errors[target.name];
@@ -54,32 +57,31 @@ class Form extends Component {
   };
 
   validateProperty = ({ name, value }) => {
-    console.log(name)
-    const obj = { [name]: value };
-    const fieldSchema = { [name]: this.schema[name] };
+    try {
+      const obj = { [name]: value };
+      const fieldSchema = { [name]: this.schema[name] };
+      const schemaTransform = yup.object().shape(fieldSchema);
+      schemaTransform.validateSync(schemaTransform.cast(obj));
+      return null;
+    } catch (err) {
+      return err.errors[0];
+    }
 
-    const { error } = Joi.validate(obj, fieldSchema);
-    return error ? error.details[0].message : null;
   };
-
 
   handleSelect = ({ target }) => {
     const { data } = this.state;
     if (target.value) return this.setState({ data: { ...data, [target.id]: target.value } });
   };
 
-
   renderInput = (label, name, type = 'text') => {
     const { data, errors } = this.state;
 
     return (
       <Input
-        label={label}
-        type={type}
-        name={name}
-        value={data[name]}
-        onChange={this.handleChange}
-        placeholder={label}
+        label={label} type={type}
+        name={name} value={data[name]}
+        onChange={this.handleChange} placeholder={label}
         error={errors[name]}
       />
     );
@@ -92,15 +94,13 @@ class Form extends Component {
 
   renderButton = label => {
     return (
-      <button
-        // disabled={this.validateForm()}
-        type='submit'
-        className='btn btn-primary'
-      >
+      <button type='submit' className='btn btn-primary'>
         {label}
       </button>
     );
   };
+
+
 }
 
 export default Form;
