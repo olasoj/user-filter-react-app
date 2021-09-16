@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import _ from 'lodash';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -7,7 +6,7 @@ import { getAllUsers, getDistinctValues, removeUser } from '../userService'
 
 import UserTable from './UsersTable';
 import Form from '../../generic/component/form/Form';
-import Pagination from '../../generic/Pagination';
+import Pagination from '../../pagination/Pagination';
 
 class Users extends Form {
   constructor() {
@@ -18,26 +17,19 @@ class Users extends Form {
         page: 1, pageSize: 10,
         selectedWorkCategory: null, selectedInterest: null,
         users: [], distinctWorkCategory: [], distinctInterest: [],
-        totalNumberOfUser: null, totalUserOnPage: 1
+        totalNumberOfUser: 1, totalUserOnPage: 1
       },
       errors: { name: '' },
     };
   }
 
-  schema = //yup.object().shape({
-    {
-
-    }
-  //});
+  schema = {}
 
   async componentDidMount() {
     try {
-      await this.fetchUserDetailsData();
+      await this.getUserDetailsData();
     } catch (err) {
-      this.setState({
-        users: [],
-        distinctValues: []
-      });
+      this.setState({ users: [], distinctValues: [] });
     }
   }
 
@@ -54,14 +46,14 @@ class Users extends Form {
   handlePageChange = async (pageNumber) => {
     const { data } = this.state
     data.page = pageNumber;
-    await this.fetchUserDetailsData()
+    await this.getUserDetailsData()
   };
 
   doSubmit = async () => {
     try {
       const { data } = this.state
       data.page = 1;
-      await this.fetchUserDetailsData()
+      await this.getUserDetailsData()
     } catch (err) {
       if (err.response && err.response.status === 400) {
         const errors = { ...this.state.errors };
@@ -80,7 +72,7 @@ class Users extends Form {
     }
   }
 
-  async fetchUserDetailsData() {
+  async getUserDetailsData() {
     const { data } = this.state;
     const { data: users } = await getAllUsers(this.getUserRequestBody(data));
     const { data: distinctValues } = await getDistinctValues();

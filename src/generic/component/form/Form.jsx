@@ -11,21 +11,22 @@ class Form extends Component {
   }
 
 
-  handleSubmit = async (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
-    const errors = await this.validateForm();
+    const errors = this.validateForm();
     this.setState({ errors } || { error: {} });
 
     if (errors) return;
     this.doSubmit();
   };
 
-  validateForm = async () => {
+  validateForm = () => {
     try {
       const { data } = this.state;
       const options = { abortEarly: false };
       const schemaTransform = yup.object().shape(this.schema);
-      await schemaTransform.validate(schemaTransform.cast(data), options);
+      schemaTransform.validateSync(schemaTransform.cast(data), options);
+
       return '';
     } catch (err) {
       return this.getFormErrors(err);
@@ -49,14 +50,14 @@ class Form extends Component {
   handleChange = ({ target }) => {
     const { data, error } = this.state;
     const errors = { ...error };
-    const errorMessage = this.validateProperty(target);
+    const errorMessage = this.validateField(target);
 
     if (errorMessage) errors[target.name] = errorMessage;
     else delete errors[target.name];
     this.setState({ data: { ...data, [target.name]: target.value }, errors: { ...errors } });
   };
 
-  validateProperty = ({ name, value }) => {
+  validateField = ({ name, value }) => {
     try {
       const obj = { [name]: value };
       const fieldSchema = { [name]: this.schema[name] };
@@ -88,8 +89,9 @@ class Form extends Component {
   };
 
   renderSelect = (dataListName, name, label) => {
-    const { data: { [dataListName]: data } } = this.state;
-    return (<Select name={[name]} options={data} onChange={this.handleSelect} label={[label]} />);
+    const { data: { [dataListName]: lists }, errors } = this.state;
+    return (<Select name={[name]} options={lists} onChange={this.handleSelect} label={[label]} error={errors[name]}
+    />);
   };
 
   renderButton = label => {
@@ -99,7 +101,6 @@ class Form extends Component {
       </button>
     );
   };
-
 
 }
 

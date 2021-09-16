@@ -11,7 +11,6 @@ const Input = ({ label, name, error, ...rest }) => {
         className='form-control'
         id={name}
         placeholder={name}
-      // ref={username}
       />
       {error && <div className='alert alert-danger'>{error}</div>}
     </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Select = ({ options, name, property, key, label, onChange }) => {
+const Select = ({ options, name, property, key, label, onChange, error }) => {
   return (
     <div className='input-group mb-3 m-2'>
       <div className='input-group-append'>
@@ -19,13 +19,11 @@ const Select = ({ options, name, property, key, label, onChange }) => {
         ))}
       </select>
 
+      {error && <div className='alert alert-danger'>{error}</div>}
+
+
     </div>
   );
 };
-
-// Select.defaultProps = {
-//   key: '_id',
-//   property: 'name'
-// };
 
 export default Select;

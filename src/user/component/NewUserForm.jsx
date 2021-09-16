@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
-import Joi from 'joi-browser';
 import * as yup from 'yup';
 import Form from '../../generic/component/form/Form';
-import * as userService from '../userService';
+import { addUser, getDistinctValues } from '../userService';
 
 class NewUserForm extends Form {
   constructor() {
@@ -10,65 +9,66 @@ class NewUserForm extends Form {
     this.state = {
       data: {
         email: "", fullName: "", username: "",
-        yearsOfExperience: "", workCategory: "", interest: ""
+        yearsOfExperience: 0, workCategory: "", interest: "",
+        distinctWorkCategory: []
       },
-      errors: {}
+      errors: {},
     };
   }
 
-  schema = //yup.object().shape({
-    {
-      email: yup.string()
-        .email()
-        .required()
-        .label('E-mail'),
+  schema = {
+    email: yup.string()
+      .email()
+      .required()
+      .label('E-mail'),
+
+    fullName: yup
+      .string()
+      .required()
+      .label('fullName'),
+
+    username: yup
+      .string()
+      .required()
+      .label('Username'),
+    workCategory: yup
+      .string()
+      .required()
+      .label('workCategory'),
+    interest: yup
+      .string()
+      .required()
+      .label('interest'),
+
+    yearsOfExperience: yup.number()
+      .required().positive()
+      .integer()
+      .label('yearsOfExperience')
+  }
 
 
-      fullName: yup
-        .string()
-        .required()
-        .label('fullName'),
-
-      username: yup
-        .string()
-        .required()
-        .label('Username'),
-      workCategory: yup
-        .string()
-        .required()
-        .label('workCategory'),
-      interest: yup
-        .string()
-        .required()
-        .label('interest'),
-
-      yearsOfExperience: yup.number()
-        .required().positive()
-        .integer()
-        .label('yearsOfExperience')
+  async componentDidMount() {
+    try {
+      await this.getDistinctWorkCategory();
+    } catch (err) {
+      this.setState({ users: [], distinctValues: [] });
     }
-  //});
+  }
 
-  // schema = {
-  //   username: Joi.string()
-  //     .required()
-  //     .email()
-  //     .label('Username'),
-  //   password: Joi.string()
-  //     .required()
-  //     .min(5)
-  //     .label('Password'),
-  //   name: Joi.string()
-  //     .required()
-  //     .label('Name')
-  // };
+  async getDistinctWorkCategory() {
+    const { data } = this.state;
+    const { data: distinctValues } = await getDistinctValues();
+    this.resolveNewUsersState(distinctValues, data);
+  }
+
+  resolveNewUsersState(distinctValues, data) {
+    this.setState({ data: { ...data, distinctWorkCategory: [...distinctValues.distinctWorkCategories] } });
+  }
 
   doSubmit = async () => {
     try {
-      // console.log(this.schema)
-      const { data } = await userService.addUser(this.state.data);
-      // console.log(data)
-      // window.location = '/';
+      await addUser(this.state.data);
+      window.location = '/';
     } catch ({ response }) {
       if (response && response.status === 400) {
         // console.log(response)
@@ -89,7 +89,7 @@ class NewUserForm extends Form {
           {this.renderInput('Full name', 'fullName')}
           {this.renderInput('Username', 'username')}
           {this.renderInput('Years Of Experience', 'yearsOfExperience')}
-          {this.renderInput('Work Category', 'workCategory')}
+          {this.renderSelect('distinctWorkCategory', "selectedWorkCategory", "Work Category")}
           {this.renderInput('Interest', 'interest')}
           {this.renderButton('Add User')}
         </form>

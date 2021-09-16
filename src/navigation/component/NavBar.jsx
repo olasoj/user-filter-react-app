@@ -3,19 +3,22 @@ import { NavLink, Link } from 'react-router-dom';
 
 const NavBar = () => {
   return (
-    <nav className='navbar navbar-expand-lg navbar-light bg-light'>
-      <Link className='navbar-brand' to='#'>
-        Navbar
-      </Link>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div className="container-fluid">
 
-      <div className='collapse navbar-collapse' id='navbarNav'>
-        <ul className='navbar-nav'>
-          <li className='nav-item'>
-            <NavLink className='nav-link' to='/users'>
-              users
-            </NavLink>
-          </li>
-        </ul>
+        <Link className='navbar-brand' to='#'>
+          Users UI
+        </Link>
+
+        <div className='collapse navbar-collapse' id='navbarNav'>
+          <ul className='navbar-nav'>
+            <li className='nav-item'>
+              <NavLink className='nav-link' to='/users'>
+                users
+              </NavLink>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   );
