@@ -12,18 +12,19 @@ const UsersTable = ({ users, onDelete }) => {
     { id: 4, label: 'Years of Experience', path: '_yearsOfExperience' },
     { id: 5, label: 'interest', path: '_interest' },
     { id: 6, label: 'Work Category', path: '_workCategory' },
-    {
-      id: 7,
-      content: user => (
-        <button className='btn btn-danger btn-sm' onClick={e => onDelete(user._id)} >
-          Delete
-        </button>
-      )
-
-    }
+    { id: 7, content: renderDeleteButton(onDelete) }
   ];
 
   return (<Table data={users} columns={columns} />);
 };
+
+function renderDeleteButton(onDelete) {
+  return user => (
+    <button className='btn btn-danger btn-sm' onClick={e => onDelete(user._id)}>
+      Delete
+    </button>
+  );
+}
+
 
 export default UsersTable;

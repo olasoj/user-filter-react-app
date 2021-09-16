@@ -1,4 +1,6 @@
 import React, { Fragment } from 'react';
+import { toast } from 'react-toastify';
+
 import * as yup from 'yup';
 import Form from '../../generic/component/form/Form';
 import { addUser, getDistinctValues } from '../userService';
@@ -52,6 +54,8 @@ class NewUserForm extends Form {
       await this.getDistinctWorkCategory();
     } catch (err) {
       this.setState({ users: [], distinctValues: [] });
+      toast.error("Failed to retrieve ")
+
     }
   }
 
@@ -69,28 +73,25 @@ class NewUserForm extends Form {
     try {
       await addUser(this.state.data);
       window.location = '/';
+      toast.success("User added")
     } catch ({ response }) {
-      if (response && response.status === 400) {
-        // console.log(response)
-        // const errors = { ...this.state.errors };
-        // errors.username = err.response.data;
-        // this.setState({ errors });
-      }
+      if (response && response.status === 400)
+        return toast.error("Server: validation error")
+      toast.error("Server: service unavailable, please try later")
+
     }
   };
-
-
 
   render() {
     return (
       <Fragment>
         <form onSubmit={e => this.handleSubmit(e)}>
-          {this.renderInput('E-mail', 'email', 'email')}
-          {this.renderInput('Full name', 'fullName')}
-          {this.renderInput('Username', 'username')}
-          {this.renderInput('Years Of Experience', 'yearsOfExperience')}
-          {this.renderSelect('distinctWorkCategory', "selectedWorkCategory", "Work Category")}
-          {this.renderInput('Interest', 'interest')}
+          {this.renderInput('E-mail *', 'email', 'email')}
+          {this.renderInput('Full name *', 'fullName')}
+          {this.renderInput('Username *', 'username')}
+          {this.renderInput('Years Of Experience *', 'yearsOfExperience')}
+          {this.renderSelect('distinctWorkCategory', "workCategory", "Work Category *")}
+          {this.renderInput('Interest *', 'interest')}
           {this.renderButton('Add User')}
         </form>
       </Fragment>

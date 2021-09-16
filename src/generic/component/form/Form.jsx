@@ -10,7 +10,6 @@ class Form extends Component {
     this.state = { data: {}, errors: {} };
   }
 
-
   handleSubmit = (e) => {
     e.preventDefault();
     const errors = this.validateForm();
@@ -72,7 +71,8 @@ class Form extends Component {
 
   handleSelect = ({ target }) => {
     const { data } = this.state;
-    if (target.value) return this.setState({ data: { ...data, [target.id]: target.value } });
+    const value = ((target.value).trim() === "Select") ? null : target.value;
+    if (target.value) return this.setState({ data: { ...data, [target.id]: value } });
   };
 
   renderInput = (label, name, type = 'text') => {

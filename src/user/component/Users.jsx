@@ -17,7 +17,7 @@ class Users extends Form {
         page: 1, pageSize: 10,
         selectedWorkCategory: null, selectedInterest: null,
         users: [], distinctWorkCategory: [], distinctInterest: [],
-        totalNumberOfUser: 1, totalUserOnPage: 1
+        totalNumberOfUser: 0, totalUserOnPage: 0
       },
       errors: { name: '' },
     };
@@ -39,7 +39,6 @@ class Users extends Form {
 
     const newUsers = users.filter(user => user._id !== id);
     this.setState({ data: { ...data, users: [...newUsers] } });
-
     await this.handleDeleteUser(id, data, users);
   };
 
@@ -50,16 +49,9 @@ class Users extends Form {
   };
 
   doSubmit = async () => {
-    try {
-      const { data } = this.state
-      data.page = 1;
-      await this.getUserDetailsData()
-    } catch (err) {
-      if (err.response && err.response.status === 400) {
-        const errors = { ...this.state.errors };
-        this.setState({ errors });
-      }
-    }
+    const { data } = this.state
+    data.page = 1;
+    await this.getUserDetailsData()
   };
 
   async handleDeleteUser(id, data, users) {
@@ -67,16 +59,22 @@ class Users extends Form {
       await removeUser(id);
     } catch (err) {
       if (err.response && err.response.status === 404)
-        toast.error('Movie not found');
+        toast.error('User not found');
       this.setState({ data: { ...data, users: users } });
     }
   }
 
   async getUserDetailsData() {
     const { data } = this.state;
-    const { data: users } = await getAllUsers(this.getUserRequestBody(data));
-    const { data: distinctValues } = await getDistinctValues();
-    this.resolveUsersState(users, distinctValues, data);
+    try {
+      const { data: users } = await getAllUsers(this.getUserRequestBody(data));
+      const { data: distinctValues } = await getDistinctValues();
+      this.resolveUsersState(users, distinctValues, data);
+      toast.success("Successfully retrieved users")
+    } catch (err) {
+      this.setState({ data: { ...data } });
+      toast.error("Failed to retrieve users")
+    }
   }
 
   resolveUsersState(users, distinctValues, data) {
