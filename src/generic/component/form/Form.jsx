@@ -61,12 +61,11 @@ class Form extends Component {
       const obj = { [name]: value };
       const fieldSchema = { [name]: this.schema[name] };
       const schemaTransform = yup.object().shape(fieldSchema);
-      schemaTransform.validateSync(schemaTransform.cast(obj));
+      schemaTransform.validateSync(obj);
       return null;
     } catch (err) {
-      return err.errors[0];
+      return err.errors[0]
     }
-
   };
 
   handleSelect = ({ target }) => {

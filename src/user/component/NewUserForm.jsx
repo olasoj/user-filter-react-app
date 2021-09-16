@@ -20,31 +20,33 @@ class NewUserForm extends Form {
 
   schema = {
     email: yup.string()
-      .email()
-      .required()
+      .email("Invalid Email")
+      .required("Email is required")
       .label('E-mail'),
 
     fullName: yup
       .string()
-      .required()
+      .required("Full name is required")
       .label('fullName'),
 
     username: yup
       .string()
-      .required()
+      .required("Username is required")
       .label('Username'),
     workCategory: yup
       .string()
-      .required()
+      .required("Work category is required")
+      .nullable(false)
       .label('workCategory'),
     interest: yup
       .string()
-      .required()
+      .required("Interest is required")
       .label('interest'),
 
-    yearsOfExperience: yup.number()
-      .required().positive()
-      .integer()
+    yearsOfExperience: yup.number("Please enter a valid positive number.")
+      .required("Please enter a valid positive number.")
+      .positive("Please enter a valid positive number.")
+      .integer("Please enter a valid positive number.")
       .label('yearsOfExperience')
   }
 
@@ -71,10 +73,12 @@ class NewUserForm extends Form {
 
   doSubmit = async () => {
     try {
-      await addUser(this.state.data);
-      window.location = '/';
-      toast.success("User added")
+      // const { data } = this.state
+      // data.yearsOfExperience = parseInt(data.yearsOfExperience)
+      const { data: { message } } = await addUser(this.state.data);
+      toast.success(message)
     } catch ({ response }) {
+      console.log(response)
       if (response && response.status === 400)
         return toast.error("Server: validation error")
       toast.error("Server: service unavailable, please try later")
@@ -89,7 +93,7 @@ class NewUserForm extends Form {
           {this.renderInput('E-mail *', 'email', 'email')}
           {this.renderInput('Full name *', 'fullName')}
           {this.renderInput('Username *', 'username')}
-          {this.renderInput('Years Of Experience *', 'yearsOfExperience')}
+          {this.renderInput('Years Of Experience *', 'yearsOfExperience', 'number')}
           {this.renderSelect('distinctWorkCategory', "workCategory", "Work Category *")}
           {this.renderInput('Interest *', 'interest')}
           {this.renderButton('Add User')}

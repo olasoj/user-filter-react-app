@@ -38,7 +38,7 @@ class Users extends Form {
     const users = [...data.users];
 
     const newUsers = users.filter(user => user._id !== id);
-    this.setState({ data: { ...data, users: [...newUsers] } });
+    this.setState({ data: { ...data, totalNumberOfUser: --data.totalNumberOfUser, users: [...newUsers] } });
     await this.handleDeleteUser(id, data, users);
   };
 
@@ -56,7 +56,8 @@ class Users extends Form {
 
   async handleDeleteUser(id, data, users) {
     try {
-      await removeUser(id);
+      const { data: { message } } = await removeUser(id);
+      toast.success(message);
     } catch (err) {
       if (err.response && err.response.status === 404)
         toast.error('User not found');
