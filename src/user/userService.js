@@ -17,3 +17,7 @@ export async function getDistinctValues() {
 export async function addUser(getAddUserRequestBody) {
   return await http.post(`${apiUrl}/create-user`, { ...getAddUserRequestBody }, { headers: { ...header } });
 }
+
+export async function removeUser(userId) {
+  return await http.delete(`${apiUrl}/${userId}`, { headers: { ...header } });
+}

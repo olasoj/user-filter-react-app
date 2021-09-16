@@ -3,11 +3,7 @@ import React from 'react';
 import Table from '../../generic/component/table/Table';
 
 
-const UsersTable = ({
-  users,
-  onDelete,
-}) => {
-  //for table headers and table body
+const UsersTable = ({ users, onDelete }) => {
 
   const columns = [
     { id: 1, label: 'Username', path: '_username' },
@@ -15,21 +11,19 @@ const UsersTable = ({
     { id: 3, label: 'Email', path: '_email' },
     { id: 4, label: 'Years of Experience', path: '_yearsOfExperience' },
     { id: 5, label: 'interest', path: '_interest' },
-    { id: 6, label: 'Work Category', path: '_workCategory' }
-    // ,
-    // {
-    //   id: 7, content: movie => (
-    //     <Like onClick={() => onLike(movie._id)} liked={movie.liked} />
-    //   )
-    // }
+    { id: 6, label: 'Work Category', path: '_workCategory' },
+    {
+      id: 7,
+      content: user => (
+        <button className='btn btn-danger btn-sm' onClick={e => onDelete(user._id)} >
+          Delete
+        </button>
+      )
+
+    }
   ];
 
-  return (
-    <Table
-      data={users}
-      columns={columns}
-    />
-  );
+  return (<Table data={users} columns={columns} />);
 };
 
 export default UsersTable;

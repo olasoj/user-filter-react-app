@@ -3,13 +3,10 @@ import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { getAllUsers, getDistinctValues } from '../userService'
+import { getAllUsers, getDistinctValues, removeUser } from '../userService'
 
-//component
 import UserTable from './UsersTable';
 import Form from '../../generic/component/form/Form';
-
-//common components
 import Pagination from '../../generic/Pagination';
 
 class Users extends Form {
@@ -24,10 +21,6 @@ class Users extends Form {
         totalNumberOfUser: null, totalUserOnPage: 1
       },
       errors: { name: '' },
-
-      selectedGenre: '',
-      foundBySearch: '',
-      sortColumn: { path: 'title', order: 'asc' }
     };
   }
 
@@ -42,23 +35,15 @@ class Users extends Form {
     }
   }
 
-  // deleteAMovie = async id => {
-  //   //clone the movies
-  //   console.log(id);
-  //   const originalMovies = [...this.state.movies];
-  //   const movies = originalMovies.filter(m => m._id !== id);
+  deleteUser = async id => {
+    const { data } = this.state
+    const users = [...data.users];
 
-  //   this.setState({ movies: [...movies] });
+    const newUsers = users.filter(user => user._id !== id);
+    this.setState({ data: { ...data, users: [...newUsers] } });
 
-  //   try {
-  //     await deleteMovie(id);
-  //   } catch (err) {
-  //     if (err.response && err.response.status === 400)
-  //       toast.error('Movie not found');
-
-  //     this.setState({ movies: originalMovies });
-  //   }
-  // };
+    await this.handleDeleteUser(id, data, users);
+  };
 
   handlePageChange = async (pageNumber) => {
     const { data } = this.state
@@ -79,6 +64,16 @@ class Users extends Form {
     }
   };
 
+  async handleDeleteUser(id, data, users) {
+    try {
+      await removeUser(id);
+    } catch (err) {
+      if (err.response && err.response.status === 404)
+        toast.error('Movie not found');
+      this.setState({ data: { ...data, users: users } });
+    }
+  }
+
   async fetchUserDetailsData() {
     const { data } = this.state;
     const { data: users } = await getAllUsers(this.getUserRequestBody(data));
@@ -87,10 +82,10 @@ class Users extends Form {
   }
 
   resolveUsersState(users, distinctValues, data) {
-    this.setState({ data: this.getNewData(data, users, distinctValues), });
+    this.setState({ data: this.getNewStateData(data, users, distinctValues), });
   }
 
-  getNewData(data, users, distinctValues) {
+  getNewStateData(data, users, distinctValues) {
     return {
       ...data, totalNumberOfUser: users._totalNumberOfUser,
       page: users._pageNumber, pageSize: users._pageSize,
@@ -116,7 +111,7 @@ class Users extends Form {
           {this.getDistinctForm()}
           {this.getTableMetaData(totalNumberOfUser)}
 
-          <UserTable users={users} onDelete={this.deleteAMovie} />
+          <UserTable users={users} onDelete={this.deleteUser} />
           <Pagination totalNumberOfRecord={totalNumberOfUser} pageSize={pageSize} currentPage={page} onPageChange={this.handlePageChange} />
         </div>
       </div>

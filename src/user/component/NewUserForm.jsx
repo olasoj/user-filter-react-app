@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import Form from '../../generic/component/form/Form';
 import * as userService from '../userService';
 
-class RegisterForm extends Form {
+class NewUserForm extends Form {
   constructor() {
     super();
     this.state = {
@@ -86,4 +86,4 @@ class RegisterForm extends Form {
   }
 }
 
-export default RegisterForm;
+export default NewUserForm;

@@ -6,9 +6,9 @@ import { BrowserRouter as Router, Route, Switch, Redirect, } from "react-router-
 import "./App.css"
 
 import Users from './user/component/Users';
-// import NavBar from './components/NavBar';
+import NavBar from './navigation/component/NavBar';
 // import NotFound from './components/NotFound';
-import RegisterForm from './user/component/RegisterForm';
+import NewUserForm from './user/component/NewUserForm';
 
 class App extends Component {
   state = {}
@@ -19,11 +19,10 @@ class App extends Component {
       <Fragment>
         <ToastContainer />
         <Router>
-          {/* <NavBar user={user} /> */}
+          <NavBar />
           <main className='container'>
             <Switch>
-              {/* <ProtectedRoutes path='/movies/:id' component={MovieForm} /> */}
-              <Route path='/users/add' component={RegisterForm} />
+              <Route path='/users/add' component={NewUserForm} />
               <Route path='/users' render={(props) => <Users {...props} />} />
               <Redirect exact from='/' to='/users' />
               {/* <Route path='/not-found' component={NotFound} /> */}
