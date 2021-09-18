@@ -1,4 +1,5 @@
 import axios from "axios"
+import { toast } from 'react-toastify';
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL
 axios.interceptors.response.use(null, (error) => {
@@ -6,7 +7,7 @@ axios.interceptors.response.use(null, (error) => {
         error.response &&
         error.response.status >= 400 &&
         error.response.status < 500
-    if (!expectedErr) console.log("unexpected error")
+    if (!expectedErr) toast.error("unexpected error")
     return Promise.reject(error)
 })
 

@@ -73,10 +73,12 @@ class NewUserForm extends Form {
 
   doSubmit = async () => {
     try {
-      // const { data } = this.state
-      // data.yearsOfExperience = parseInt(data.yearsOfExperience)
-      const { data: { message } } = await addUser(this.state.data);
+      toast.info("Creating user")
+      const { data } = this.state
+      data.yearsOfExperience = parseInt(data.yearsOfExperience)
+      const { data: { message } } = await addUser(data);
       toast.success(message)
+      this.props.history.replace("/users")
     } catch ({ response }) {
       console.log(response)
       if (response && response.status === 400)

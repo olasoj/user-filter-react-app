@@ -29,7 +29,7 @@ class Users extends Form {
     try {
       await this.getUserDetailsData();
     } catch (err) {
-      this.setState({ users: [], distinctValues: [] });
+      this.setState({ data: { users: [], distinctValues: [] } });
     }
   }
 
@@ -59,13 +59,13 @@ class Users extends Form {
       const { data: { message } } = await removeUser(id);
       toast.success(message);
     } catch (err) {
-      if (err.response && err.response.status === 404)
-        toast.error('User not found');
+      if (err.response && err.response.status === 404) toast.error('User not found');
       this.setState({ data: { ...data, users: users } });
     }
   }
 
   async getUserDetailsData() {
+    toast.info("Retrieving users")
     const { data } = this.state;
     try {
       const { data: users } = await getAllUsers(this.getUserRequestBody(data));
