@@ -118,7 +118,7 @@ class Users extends Form {
   getTableMetaData(totalNumberOfUsers) {
     return <div className='row'>
       <div className='col'>
-        <p>{totalNumberOfUsers} users(s) founded</p>
+        <p>{totalNumberOfUsers} users(s) found</p>
       </div>
       <div className='col'>
         <Link className='btn-primary btn m-2' to='/users/add'>
