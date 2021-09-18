@@ -7,7 +7,7 @@ const NavBar = () => {
       <div className="container-fluid">
 
         <Link className='navbar-brand' to='#'>
-          Users UI
+          Users Filter App
         </Link>
 
         <div className='collapse navbar-collapse' id='navbarNav'>
