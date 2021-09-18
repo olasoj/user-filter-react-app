@@ -1,70 +1,106 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Logo](https://i.postimg.cc/xjB3ch1T/p-Tqr-Ex-Xac.jpg)
 
-## Available Scripts
+    
+# User Filter Application
 
-In the project directory, you can run:
+The User Filter Application aims at viewing users stored in the databae whilst filtering through users' interests and work categories.
+The application was built with nestJS (backend) and reactJS (frontend).
 
-### `npm start`
+## Project Link
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+[user-filter-nest-app](https://user-management-nest-backend.herokuapp.com/api)
 
-### `npm test`
+[user-filter-react-app](https://users-filter-react-app.herokuapp.com/users)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Screenshots
 
-### `npm run build`
+![App Screenshot](https://i.postimg.cc/3NjNrkwG/Screenshot-2021-09-18-18-44-42.png)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  
+## Getting Started
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**user-filer-nest-app**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Clone the project**
 
-### `npm run eject`
+```bash
+   git clone -b main https://github.com/olasoj/user-filer-nest-app.git
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- **Define the required environment variables**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+| S/N | Environment Variable | Description                                                      |
+| --- | -------------------- | ---------------------------------------------------------------- |
+| 1   | DB\_CONNECTION       | Database connection: postgres                                    |
+| 2   | DB\_HOST             | Database host                                                    |
+| 3   | DB\_USERNAME         | Database username                                                |
+| 4   | DB\_PASSWORD         | Database password                                                |
+| 5   | DB\_NAME             | Database name                                                    |
+| 6   | DB\_PORT:            | Database port                                                    |
+| 7   | DB\_SYNCHRONIZE      | Database synchronization: true                                   |
+| 8   | DB\_LOGGING          | Database logging: true                                           |
+| 9   | DB\_ENTITIES         | Value: "./src/\*\*/model/entity/\*.js, ./dist/\*\*/entity/\*.js" |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- **Go to the project directory**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```bash
+  cd user-filer-nest-app
+```
 
-## Learn More
+- **Start the user-filer-nest-app**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+    npm install
+    npm run start:dev
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**user-filer-react-app**
 
-### Code Splitting
+- **Clone the project**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+   git clone -b master https://github.com/olasoj/user-filter-react-app.git
+```
 
-### Analyzing the Bundle Size
+- **Go to the project directory**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+    cd user-filter-react-app 
+ ```
 
-### Making a Progressive Web App
+- **Start the user-filer-react-app**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+    npm install
+    npm run start
+```
 
-### Advanced Configuration
+## Features
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Pagination
+- Filtering
+- User removal
+- User creation
 
-### Deployment
+  
+## Documentation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+[Documentation](https://rosenic-q3-api-doc.surge.sh/)
 
-### `npm run build` fails to minify
+  
+## Authors
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [@olasoj](https://www.github.com/olasoj)
+
+  
+## Tech Stack
+
+**Client:** React, BootStrap
+
+**Server:** NestJS
+
+**Database**: postgresql
+
+  
